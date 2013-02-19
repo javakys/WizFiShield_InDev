@@ -63,6 +63,9 @@ prog_char PING_Msg[] PROGMEM = "AT+PING=%s,%d\r\n";
 
 prog_char Disassociate_Msg[] PROGMEM = "Disassociated!";
 
+prog_char ConnectNoti_Msg[] PROGMEM = "CONNECT";
+prog_char DisconnNoti_Msg[] PROGMEM = "DISCONNECT";
+prog_char DisassociateNoti_Msg[] PROGMEM = "Disassociation";
 
 PROGMEM const char *string_table[] = 
 {
