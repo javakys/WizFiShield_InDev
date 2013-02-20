@@ -7,16 +7,24 @@
 extern WizFi2x0Class myWizFi;
 
 #define MAX_PARAM_COUNT	1
-#define PARSEBUF_SIZE		128
+#define PARSEBUF_SIZE		150
 
 enum PARSESTATE{
 	NO_PARSING = 0,
 	IN_PARSING = 1
 };
 
+enum PARAM_CMD{
+	NO_CMD = 0,
+	FW_CMD = 1,
+	BW_CMD = 2,
+	RT_CMD = 3,
+	LF_CMD = 4
+};
+
 typedef struct PARAM_STRUCT_TAG{
 	char NAME[16];
-	char VALUE[16];
+	PARAM_CMD VALUE;
 }PARAM_STRUCT;
 
 class HTMLParser {
@@ -24,7 +32,7 @@ public:
 	HTMLParser();
 
 	uint8_t Parsing(char * buf); //Parse HTML message transferred by parameter, buf. It returns 1 when it encounters to the EOF of HTML file, ohterwise 0
-	uint8_t GetParam(char * param_name, char * param_value); //If we received a pair of name, which specified in param_name, and value, this function stores value to param_value and returns 1. Otherwise, return 0.  
+	uint8_t GetParam(void); //If we received a pair of name, which specified in param_name, and value, this function stores value to param_value and returns 1. Otherwise, return 0.  
 	
 	
 private:
@@ -35,11 +43,13 @@ private:
 	
 	byte parserBuf[PARSEBUF_SIZE]; // a buffer for storing temporary HTML message
 	PARSESTATE bInParsing; // a flag variable indicating whether HTML message is terminated with CR and LF or not.
-	PARAM_STRUCT myParam[MAX_PARAM_COUNT];
+	PARAM_STRUCT myParam;
 	uint8_t myParamCount;
 
 	bool IsFirstCRLF;
 	uint8_t parserBufIndex;
+
+	uint8_t Parsing_Get(char *buf);
 };
 
 #endif

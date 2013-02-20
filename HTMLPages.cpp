@@ -14,10 +14,11 @@ prog_char Page1_Line4[] PROGMEM = " maximum-scale=5.0, minimum-scale=5.0, width=
 prog_char head_end[] PROGMEM = "</head>\r\n";   // "String 0" etc are strings to store - change to suit.
 prog_char Page1_Line5[] PROGMEM = "<body>\r\n";
 prog_char new_Line[] PROGMEM = "\r\n";
-prog_char Page1_Line6[] PROGMEM = "Hello World\r\n";
+prog_char Page1_Line6[] PROGMEM = "<h1 align=\"center\">Select </h1>\r\n";
 prog_char Page1_Line7[] PROGMEM = "<form>\r\n";
-prog_char Page1_Line8[] PROGMEM = "<table width=\"100%\"><tr><td width=\"40%\"></td><td width=\"20%\" bgcolor=\"silver\" align=\"center\"><h1><button ";
-prog_char Page1_Line8_cont[] PROGMEM = "name=\"command\" value=\"FW_CMD\">forward</button></h1></td><td width=\"40%\"></td></tr>\r\n";
+prog_char Page1_Line8[] PROGMEM = "<table width=\"100%\"><tr><td colspan=3 align=\"center\"><h1>Press button you want</h1></td></tr><tr>";
+prog_char Page1_Line8_cont[] PROGMEM = "<td width=\"40%\"></td><td width=\"20%\" bgcolor=\"silver\" align=\"center\"><h1><button ";
+prog_char Page1_Line8_cont2[] PROGMEM = "name=\"command\" value=\"FW_CMD\">forward</button></h1></td><td width=\"40%\"></td></tr>\r\n";
 prog_char Middle_Line[] PROGMEM = "<tr><td width= \"40%\" align=\"right\"><h1><button name=\"command\" value=\"LEFT_CMD\">LEFT</button></h1></td>";
 prog_char Middle_Line_cont[] PROGMEM = "<td width=\"20%\"></td><td width= \"40%\" align=\"left\"><h1><button name=\"command\" value=\"RIGHT_CMD\">";
 prog_char Middle_Line_cont2[] PROGMEM = "RIGHT</button></h1></td></tr>\r\n";
@@ -82,10 +83,11 @@ PROGMEM const char *HTML_table[] =
 	new_Line,				// 0
 //	Html_start,
 //	head_start,
-	Page1_Line6,			// 5
+//	Page1_Line6,			// 5
 	Page1_Line7,			// 6
 	Page1_Line8,				// 7
 	Page1_Line8_cont,
+	Page1_Line8_cont2,
 	Middle_Line,
 	Middle_Line_cont,
 	Middle_Line_cont2,
@@ -132,6 +134,7 @@ PROGMEM const char *HTML_table[] =
 	Disassociate_Msg		// 44
 */
 };
+#endif
 
 HTMLPages::HTMLPages() //constructor
 {
@@ -154,5 +157,4 @@ uint8_t HTMLPages::GetNextLine(char *buf) //if no data, return 0. Otherwise, ret
 	}
 }
 
-#endif
 
