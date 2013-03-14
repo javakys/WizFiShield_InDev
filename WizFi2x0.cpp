@@ -118,8 +118,19 @@ PROGMEM const char *string_table[] =
 
 #endif
 
+
 WizFi2x0Class::WizFi2x0Class()
 {
+	WizFi2x0_RST = 2;
+	WizFi2x0_DataReady = 3;
+	WizFi2x0_CS = 4;
+}
+
+void WizFi2x0Class::SetPinMap(uint8_t tmpRST, uint8_t tmpRDY, uint8_t tmpCS)
+{
+	WizFi2x0_RST = tmpRST;
+	WizFi2x0_DataReady = tmpRDY;
+	WizFi2x0_CS = tmpCS;
 }
 
 void WizFi2x0Class::begin(void)
@@ -1209,9 +1220,9 @@ uint8_t WizFi2x0Class::CheckReply(uint8_t command)
 			{
 				if(RxIdx > 0)
 				{
-#ifdef DEBUG_ENABLE		
+//#ifdef DEBUG_ENABLE		
 					Serial.println((char *)MsgBuf);
-#endif
+//#endif
 					retval = ParseReply(MsgBuf, command);
 					memset(MsgBuf, 0, sizeof(MsgBuf));
 					RxIdx = 0;

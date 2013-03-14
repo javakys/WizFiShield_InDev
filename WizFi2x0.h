@@ -9,9 +9,6 @@
 //extern WizFiClient myClient;
 //prog_uchar WizFi2x0_RST PROGMEM = 2;   // "String 0" etc are strings to store - change to suit.
 
-#define WizFi2x0_RST			2
-#define WizFi2x0_DataReady	3
-#define WizFi2x0_CS			4
 
 #define WizFi2x0_CmdState_IDLE	0x01
 #define WizFi2x0_CmdState_Sent	0x02
@@ -231,6 +228,9 @@ private:
 	
 	uint8_t OperatingMode;
 
+       uint8_t WizFi2x0_RST;
+	uint8_t WizFi2x0_DataReady;
+	uint8_t WizFi2x0_CS;
 	
 private:
 	uint8_t SendCommand(uint8_t command);
@@ -280,6 +280,7 @@ private:
 	
 public:
 	WizFi2x0Class();
+	void SetPinMap(uint8_t tmpRST, uint8_t tmpRDY, uint8_t tmpCS);
 	void begin(void);
 	uint8_t associate(void);
 	uint8_t associate(const char *ssid, const char *passphrase, SECUTYPE EncryptType, boolean isDHCP);

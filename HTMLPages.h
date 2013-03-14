@@ -10,7 +10,12 @@ class HTMLPages{
 public:
 	HTMLPages(); //constructor
 	uint8_t GetNextLine(char *buf); //if no data, return 0. Otherwise, return 1
+	void SetCurrentBatteryStatus(uint8_t status);
+	void SetCurrentBatteryVoltage(int val);
 private:
 	uint8_t CurrentIndex;
+	uint8_t CurrentBatteryStatus;
+	float CalVol;
+	int CastVol;
 };
 #endif

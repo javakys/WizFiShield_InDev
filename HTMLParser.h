@@ -33,6 +33,7 @@ public:
 
 	uint8_t Parsing(char * buf); //Parse HTML message transferred by parameter, buf. It returns 1 when it encounters to the EOF of HTML file, ohterwise 0
 	uint8_t GetParam(void); //If we received a pair of name, which specified in param_name, and value, this function stores value to param_value and returns 1. Otherwise, return 0.  
+	void SetParam(PARAM_CMD cmd);
 	
 	
 private:

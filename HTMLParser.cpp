@@ -99,6 +99,11 @@ uint8_t HTMLParser::GetParam(void)
 	return (uint8_t)myParam.VALUE;
 }
 
+void HTMLParser:SetParam(PARAM_CMD cmd)
+{
+	myParam.VALUE = cmd;
+}
+
 uint8_t HTMLParser::Parsing_Get(char *buf)
 {
 	uint8_t i, index = 0;
