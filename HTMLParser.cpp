@@ -2,8 +2,8 @@
 #include <avr/pgmspace.h>
 
 #ifdef CODEMEM
-prog_char Get_Msg[] PROGMEM = "GET /?";   // "String 0" etc are strings to store - change to suit.
-prog_char Cmd_Msg[] PROGMEM = "command";   // "String 0" etc are strings to store - change to suit.
+prog_char Get_Msg[] PROGMEM = "GET";   // "String 0" etc are strings to store - change to suit.
+prog_char URI_Msg[] PROGMEM = "/?command";   // "String 0" etc are strings to store - change to suit.
 prog_char Forward_CMD_Msg[] PROGMEM = "FW_CMD";   // "String 0" etc are strings to store - change to suit.
 prog_char Backward_CMD_Msg[] PROGMEM = "BW_CMD";   // "String 0" etc are strings to store - change to suit.
 prog_char Right_CMD_Msg[] PROGMEM = "RIGHT_CMD";   // "String 0" etc are strings to store - change to suit.
@@ -13,7 +13,7 @@ prog_char Left_CMD_Msg[] PROGMEM = "LEFT_CMD";
 PROGMEM const char *CMDMsg_table[] = 
 {
 	Get_Msg,
-	Cmd_Msg,
+	URI_Msg,
 	Forward_CMD_Msg,
 	Backward_CMD_Msg,
 	Right_CMD_Msg,
@@ -35,7 +35,8 @@ HTMLParser::HTMLParser()
 uint8_t HTMLParser::Parsing(char * buf)
 {
 	uint8_t i, retval, index = 0;
-	char tmpbuf[10], msgbuf[10];
+	char msgbuf[10];
+	char *tmpbuf, *tmpbuf2;
 
 
 	if(bInParsing == NO_PARSING)
@@ -57,9 +58,7 @@ uint8_t HTMLParser::Parsing(char * buf)
 					// Do Parsing a sentence terminated by CR and LF
 					Serial.println((char *)parserBuf);
 
-					memset(tmpbuf, 0, 10);
-					for(i=0; i<6; i++)
-						tmpbuf[i] = parserBuf[i];
+					tmpbuf = strtok((char *)parserBuf, " ");
 
 					Serial.println((char *)tmpbuf);
 					
@@ -67,9 +66,51 @@ uint8_t HTMLParser::Parsing(char * buf)
 				       strcpy_P((char *)msgbuf, (char*)pgm_read_word(&(CMDMsg_table[0]))); // Necessary casts and dereferencing, just copy. 
 				//	Serial.println((char *)msgbuf);
 					
-					if(!strcmp((const char*)tmpbuf, (const char*)msgbuf))
+					if(!strcmp((const char*)tmpbuf, (const char*)msgbuf)) 	// GET
 					{
-						Parsing_Get((char *)parserBuf);
+						tmpbuf = strtok(NULL, " ");
+						memset(msgbuf, 0, 10);
+						Serial.println((char *)tmpbuf);
+						
+				       	strcpy_P((char *)msgbuf, (char*)pgm_read_word(&(CMDMsg_table[1]))); // Necessary casts and dereferencing, just copy. 
+						if(strstr((char const*)tmpbuf, (const char *)msgbuf) != NULL)
+						{
+							if((tmpbuf2 = strchr((char const*)tmpbuf, '=')) != NULL)
+							{
+								memset(msgbuf, 0, 10);
+				       			strcpy_P((char *)msgbuf, (char*)pgm_read_word(&(CMDMsg_table[2]))); // Necessary casts and dereferencing, just copy. 
+								if(strstr((char const*)tmpbuf2, (const char *)msgbuf) != NULL){
+									Serial.println((char *)msgbuf);
+									SetParam(FW_CMD);
+								}
+								
+								memset(msgbuf, 0, 10);
+				       			strcpy_P((char *)msgbuf, (char*)pgm_read_word(&(CMDMsg_table[3]))); // Necessary casts and dereferencing, just copy. 
+								if(strstr((char const*)tmpbuf2, (const char *)msgbuf) != NULL){
+									SetParam(BW_CMD);
+									Serial.println((char *)msgbuf);
+								}
+
+								memset(msgbuf, 0, 10);
+				       			strcpy_P((char *)msgbuf, (char*)pgm_read_word(&(CMDMsg_table[4]))); // Necessary casts and dereferencing, just copy. 
+								if(strstr((char const*)tmpbuf2, (const char *)msgbuf) != NULL){
+									Serial.println((char *)msgbuf);
+									SetParam(RT_CMD);
+								}
+								
+
+								memset(msgbuf, 0, 10);
+				       			strcpy_P((char *)msgbuf, (char*)pgm_read_word(&(CMDMsg_table[5]))); // Necessary casts and dereferencing, just copy. 
+								if(strstr((char const*)tmpbuf2, (const char *)msgbuf) != NULL){
+									SetParam(LF_CMD);
+									Serial.println((char *)msgbuf);
+								}
+							}
+								
+						}
+
+						tmpbuf = strtok(NULL, " ");
+						Serial.println((char *)tmpbuf);
 					}
 					memset(parserBuf, 0, PARSEBUF_SIZE);
 					parserBufIndex = 0;
@@ -99,7 +140,7 @@ uint8_t HTMLParser::GetParam(void)
 	return (uint8_t)myParam.VALUE;
 }
 
-void HTMLParser:SetParam(PARAM_CMD cmd)
+void HTMLParser::SetParam(PARAM_CMD cmd)
 {
 	myParam.VALUE = cmd;
 }
